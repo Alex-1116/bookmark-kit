@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  slug      String    @unique
+  color     String    @default("#3b82f6")
+  icon      String?
+  bookmarks Bookmark[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Tag {
+  id        Int                @id @default(autoincrement())
+  name      String             @unique
+  slug      String             @unique
+  bookmarks BookmarkToTag[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
+
+model Bookmark {
+  id          Int                @id @default(autoincrement())
+  title       String
+  url         String
+  description String?
+  categoryId  Int?
+  category    Category?          @relation(fields: [categoryId], references: [id])
+  tags        BookmarkToTag[]
+  clickCount  Int                @default(0)
+  lastClicked DateTime?
+  isDeleted   Boolean            @default(false)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model BookmarkToTag {
+  bookmarkId Int
+  tagId      Int
+  bookmark   Bookmark @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
+  tag        Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([bookmarkId, tagId])
+}
