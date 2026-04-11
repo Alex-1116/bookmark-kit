@@ -19,7 +19,8 @@ import SearchFilter from '@/components/SearchFilter'
 import RecentBookmarks from '@/components/RecentBookmarks'
 import CategoryManager from '@/components/CategoryManager'
 import TagManager from '@/components/TagManager'
-import { Plus, BookmarkIcon } from 'lucide-react'
+import { Plus, BookmarkIcon, Trash2 } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Home() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([])
@@ -234,6 +235,20 @@ export default function Home() {
               onCreateCategory={handleCreateCategory}
             />
             <TagManager tags={tags} onCreateTag={handleCreateTag} />
+            
+            <Link
+              href="/trash"
+              className="flex items-center gap-3 p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all"
+            >
+              <Trash2 size={18} className="text-gray-500" />
+              <div className="flex-1">
+                <h2 className="font-semibold text-gray-900">回收站</h2>
+                <p className="text-xs text-gray-500">已删除的书签</p>
+              </div>
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
         </div>
       </main>

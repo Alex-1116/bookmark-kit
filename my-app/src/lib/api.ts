@@ -116,3 +116,35 @@ export async function createTag(data: {
   if (!res.ok) throw new Error('Failed to create tag')
   return res.json()
 }
+
+export async function fetchTrashedBookmarks(): Promise<Bookmark[]> {
+  const res = await fetch(`${API_BASE}/bookmarks/trashed`)
+  if (!res.ok) throw new Error('Failed to fetch trashed bookmarks')
+  return res.json()
+}
+
+export async function restoreBookmark(id: string): Promise<Bookmark> {
+  const res = await fetch(`${API_BASE}/bookmarks/${id}/restore`, {
+    method: 'POST',
+  })
+  if (!res.ok) throw new Error('Failed to restore bookmark')
+  return res.json()
+}
+
+export async function permanentDeleteBookmark(id: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/bookmarks/${id}/permanent-delete`, {
+    method: 'DELETE',
+  })
+  if (!res.ok) throw new Error('Failed to permanently delete bookmark')
+}
+
+export async function cleanupTrashedBookmarks(): Promise<{
+  success: boolean
+  deletedCount: number
+}> {
+  const res = await fetch(`${API_BASE}/cron/cleanup-trashed`, {
+    method: 'POST',
+  })
+  if (!res.ok) throw new Error('Failed to cleanup trashed bookmarks')
+  return res.json()
+}
