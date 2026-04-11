@@ -22,6 +22,7 @@ export interface Bookmark {
   clickCount: number
   lastClicked?: string
   isDeleted: boolean
+  deletedAt?: string
   categoryId?: string
   category?: Category
   tags: Tag[]

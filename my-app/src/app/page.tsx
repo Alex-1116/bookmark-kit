@@ -19,7 +19,8 @@ import SearchFilter from '@/components/SearchFilter'
 import RecentBookmarks from '@/components/RecentBookmarks'
 import CategoryManager from '@/components/CategoryManager'
 import TagManager from '@/components/TagManager'
-import { Plus, BookmarkIcon } from 'lucide-react'
+import { Plus, BookmarkIcon, Trash2 } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Home() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([])
@@ -228,6 +229,18 @@ export default function Home() {
           </div>
 
           <div className="space-y-6">
+            <Link
+              href="/trash"
+              className="flex items-center gap-3 p-4 bg-white rounded-lg border border-gray-200 hover:border-red-300 hover:bg-red-50 transition-all group"
+            >
+              <div className="p-2 bg-red-100 rounded-lg group-hover:bg-red-200 transition-colors">
+                <Trash2 className="text-red-500" size={20} />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-gray-900">回收站</h3>
+                <p className="text-sm text-gray-500">查看已删除的书签</p>
+              </div>
+            </Link>
             <RecentBookmarks bookmarks={recentBookmarks} />
             <CategoryManager
               categories={categories}
