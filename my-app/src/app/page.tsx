@@ -12,6 +12,7 @@ import {
   createCategory,
   fetchTags,
   createTag,
+  fetchTrashedBookmarks,
 } from '@/lib/api'
 import BookmarkCard from '@/components/BookmarkCard'
 import BookmarkForm from '@/components/BookmarkForm'
@@ -19,6 +20,7 @@ import SearchFilter from '@/components/SearchFilter'
 import RecentBookmarks from '@/components/RecentBookmarks'
 import CategoryManager from '@/components/CategoryManager'
 import TagManager from '@/components/TagManager'
+import TrashLink from '@/components/TrashLink'
 import { Plus, BookmarkIcon } from 'lucide-react'
 
 export default function Home() {
@@ -26,6 +28,7 @@ export default function Home() {
   const [recentBookmarks, setRecentBookmarks] = useState<Bookmark[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [tags, setTags] = useState<Tag[]>([])
+  const [trashCount, setTrashCount] = useState(0)
   const [loading, setLoading] = useState(true)
 
   const [search, setSearch] = useState('')
@@ -40,7 +43,7 @@ export default function Home() {
 
   const loadData = useCallback(async () => {
     try {
-      const [bookmarksData, recentData, categoriesData, tagsData] =
+      const [bookmarksData, recentData, categoriesData, tagsData, trashedData] =
         await Promise.all([
           fetchBookmarks({
             search,
@@ -52,11 +55,13 @@ export default function Home() {
           fetchRecentBookmarks(),
           fetchCategories(),
           fetchTags(),
+          fetchTrashedBookmarks(),
         ])
       setBookmarks(bookmarksData)
       setRecentBookmarks(recentData)
       setCategories(categoriesData)
       setTags(tagsData)
+      setTrashCount(trashedData.length)
     } catch (error) {
       console.error('Failed to load data:', error)
     } finally {
@@ -228,6 +233,7 @@ export default function Home() {
           </div>
 
           <div className="space-y-6">
+            <TrashLink count={trashCount} />
             <RecentBookmarks bookmarks={recentBookmarks} />
             <CategoryManager
               categories={categories}
